@@ -6,6 +6,28 @@
     <title>To Do List</title>
 </head>
 <body>
+    <div class="header">
+       <button id="addProject">add project</button>
+    </div>
+    <div class="info">
+        <form action="new-project" id="new-project">
+            <label for="name">Project Name</label>
+            <input type="text" name="name" id="name">
+            <label for="due">Due Date</label>
+            <input type="date" name="due" id="due">
+            <label for="priority">Priority Level</label>
+            <select name="priority" id="priority">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div class="content-wrapper">
+    <div class="projects"></div>
+    <div class="tasks"></div>
+    </div>
     
 </body>
 </html>
