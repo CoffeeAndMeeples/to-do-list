@@ -21,6 +21,6 @@ function loadProjects(projects) {
 
 
 function addProjectListener() {
-    const btn =
+    
 
 }

@@ -7,9 +7,22 @@
 </head>
 <body>
     <div class="header">
-       <button id="addProject">add project</button>
+       <p>To Do List</p>
     </div>
+    <div class="add-task">
+        <form action="new-task" id="new-task">
+            <label for="name">Task Name</label>
+            <input type="text" name="name" id="name">
+            <label for="project">Project</label>
+            <select name="project" id="project">
+                <option value="" disabled selected>-Assign to a Project</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div class="content-wrapper">
     <div class="info">
+        <h2>New Project</h2>
         <form action="new-project" id="new-project">
             <label for="name">Project Name</label>
             <input type="text" name="name" id="name">
@@ -24,9 +37,13 @@
             <input type="submit" value="Submit">
         </form>
     </div>
-    <div class="content-wrapper">
-    <div class="projects"></div>
-    <div class="tasks"></div>
+    
+    <div class="projects">
+        <h2>Projects</h2>
+    </div>
+    <div class="tasks">
+        <h2>Tasks</h2>
+    </div>
     </div>
     
 </body>

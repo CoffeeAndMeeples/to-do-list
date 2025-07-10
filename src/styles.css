@@ -1,6 +1,39 @@
 * {
-    border: 1px solid salmon;
+    
 }
 body {
-    background-color: rebeccapurple;
+    background-color: lightblue;
+    display: flex;
+    flex-direction: column;
+}
+.header {
+    flex: 0;
+    height: 2fr;
+    justify-content: center;
+    align-items: center;
+}
+.header > p {
+    text-align: center;
+    font-size: xx-large;
+}
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    gap: 4px;
+}
+.content-wrapper > * {
+    flex: 1;
+    border: 2px solid black;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+#new-project {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.selected {
+    background-color: lightgreen;
 }
