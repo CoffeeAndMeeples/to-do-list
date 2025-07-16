@@ -1,6 +1,4 @@
-* {
-    
-}
+
 body {
     background-color: lightblue;
     display: flex;
@@ -36,4 +34,14 @@ body {
 
 .selected {
     background-color: lightgreen;
+}
+
+.selected > * {
+    padding-left: 16px;
+    background-color: lightcyan;
+}
+
+.project-container {
+    border: 2px solid black;
+    border-radius: 4px;
 }
