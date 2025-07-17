@@ -9,6 +9,7 @@ class Project {
         this.priority = priority;
         this.id = makeKebab(name);
         this.selected = "False";
+        this.complete = "False";
     }
 }
 
@@ -66,13 +67,13 @@ taskForm.addEventListener("submit", (event) => {
     //loop through userProjects and find the project that matches
     for (const item of userProjects) {
         console.log(formData.get("project"));
-        console.log(item.name);
         if (item.name === formData.get("project")) {
             item.tasks.push(newTask);
+            const projectToDeselect = document.getElementById(item.id + "-checkbox");
+            projectToDeselect.checked = false;
             
             //check to see if selected project is active project
             const currentProject = document.querySelector(".selected");
-            console.log(currentProject);
             if (currentProject === null) {
                 return
             }
@@ -118,6 +119,7 @@ function displayProjects(projectList) {
             newDiv.appendChild(newLabel);
             makeProjectClickable(newDiv);
             parentNode.appendChild(newDiv);
+            activateProjectCheckbox(newInput, element);
         }
     });
 }
@@ -134,12 +136,20 @@ function makeProjectClickable(node) {
             currentlySelected.removeChild(currentlySelected.lastChild);
         }
         }
-        //populate the node with children that hold the project's details
-        loadProjectDetails(node);
-        
-        //add 'selected' to the clicked node
-        node.classList.add('selected');
-        displayTasks(node);
+        //if user has selected the currently selected node-escape function(making the click minimize details)
+        if (currentlySelected === node) {
+            //clear tasks
+            clearTasks();
+            return;
+        }
+        //else populate the node with children that hold the project's details
+        else {
+            loadProjectDetails(node);
+            
+            //add 'selected' to the clicked node
+            node.classList.add('selected');
+            displayTasks(node);
+        }
         
     })
 }
@@ -152,15 +162,20 @@ function updateTaskForm(project) {
     dropdown.appendChild(newProject);
 
 }
-// project node as the argument use the text to find the project from userProjects
-// and then create a task node for each task in selected project
-function displayTasks(node) {
+
+function clearTasks() {
     const parentNode = document.querySelector(".tasks");
     //clear existing children 
     //leave the first child as it's the label for the node
     while (parentNode.children.length > 1) {
         parentNode.removeChild(parentNode.lastChild);
     }
+}
+// project node as the argument use the text to find the project from userProjects
+// and then create a task node for each task in selected project
+function displayTasks(node) {
+    clearTasks();
+    const parentNode = document.querySelector(".tasks");
 
     for (const project of userProjects) {
   
@@ -176,9 +191,14 @@ function displayTasks(node) {
                 newInput.type = "checkbox";
                 newInput.id = task.id + "-checkbox";
                 newInput.name = task.id + "-checkbox";
+                //tick checkbox if task.complete is true
+                if (task.complete === "True") {
+                    newInput.checked = true;
+                }
                 newNode.appendChild(newInput);
                 newNode.appendChild(newLabel);
                 parentNode.appendChild(newNode);
+                activateTaskCheckbox(newInput, task, project);
             }
             project.selected = "True";
             
@@ -207,4 +227,44 @@ function loadProjectDetails(node) {
     container.appendChild(due);
     container.appendChild(priority);
     node.appendChild(container);
+}
+
+function activateTaskCheckbox(checkboxNode, task, project) {
+    checkboxNode.addEventListener("click", (event) => {
+        const checkbox = document.getElementById(project.id + "-checkbox");
+        //if box is unchecked, set task.complete to "False" 
+        if (checkboxNode.checked) {
+            task.complete = "True";
+        }
+        else {
+            task.complete = "False";
+            checkbox.checked = false;
+        }
+        let tasksComplete = "True";
+        for (const task of project.tasks) {
+            if (task.complete === "False") {
+                tasksComplete = "False";
+            }
+        }
+        if (tasksComplete === "True") {
+            //get the project checkbox and set it to checked, set project.complete to true
+            checkbox.checked = true;
+
+        }
+    })
+
+}
+function activateProjectCheckbox(checkboxNode, project) {
+    checkboxNode.addEventListener("change", (event) => {
+        //if box is unchecked, set project.complete to "False" 
+        if (checkboxNode.checked) {
+            project.complete = "True";
+            console.log(project);
+        }
+        else {
+            project.complete = "False";
+            console.log(project);
+        }
+    })
+
 }
