@@ -1,4 +1,4 @@
-import { userProjects } from ".";
+import { userProjects, storeArray } from ".";
 
 export function clearTasks() {
     const parentNode = document.querySelector(".tasks");
@@ -37,6 +37,9 @@ export function displayProjects(projectList) {
             newInput.type = "checkbox";
             newInput.id = element.id + "-checkbox";
             newInput.name = element.id + "-checkbox";
+            if (element.complete === "True") {
+                newInput.checked = true;
+            }
             newDiv.appendChild(newInput);
             newDiv.appendChild(newLabel);
             makeProjectClickable(newDiv);
@@ -81,10 +84,12 @@ function activateProjectCheckbox(checkboxNode, project) {
         //if box is unchecked, set project.complete to "False" 
         if (checkboxNode.checked) {
             project.complete = "True";
+            storeArray("userProjectsArray", userProjects);
             console.log(project);
         }
         else {
             project.complete = "False";
+            storeArray("userProjectsArray", userProjects);
             console.log(project);
         }
     })
@@ -113,7 +118,7 @@ function loadProjectDetails(node) {
 
 // project node as the argument use the text to find the project from userProjects
 // and then create a task node for each task in selected project
-function displayTasks(node) {
+export function displayTasks(node) {
     clearTasks();
     const parentNode = document.querySelector(".tasks");
 
@@ -156,20 +161,25 @@ function activateTaskCheckbox(checkboxNode, task, project) {
         //if box is unchecked, set task.complete to "False" 
         if (checkboxNode.checked) {
             task.complete = "True";
+            storeArray("userProjectsArray", userProjects);
         }
         else {
             task.complete = "False";
+            storeArray("userProjectsArray", userProjects);
             checkbox.checked = false;
         }
         let tasksComplete = "True";
         for (const task of project.tasks) {
             if (task.complete === "False") {
                 tasksComplete = "False";
+                storeArray("userProjectsArray", userProjects);
             }
         }
         if (tasksComplete === "True") {
             //get the project checkbox and set it to checked, set project.complete to true
+            project.complete = "True";
             checkbox.checked = true;
+            storeArray("userProjectsArray", userProjects);
 
         }
     })

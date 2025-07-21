@@ -1,5 +1,5 @@
 import "./styles.css";
-import { clearTasks, displayProjects, makeProjectClickable, activateProjectCheckbox } from "./dom.js";
+import { clearTasks, displayProjects, makeProjectClickable, activateProjectCheckbox, displayTasks } from "./dom.js";
 
 export let userProjects = [];
 retrieveArray("userProjectsArray");
@@ -28,7 +28,7 @@ class Task {
 //use "userProjectsArray as the key for storing and retrieving userProjects"
 
 //function to update local storage with userProjects
-function storeArray(key, array) {
+export function storeArray(key, array) {
     try {
         const jsonString = JSON.stringify(array);
         localStorage.setItem(key, jsonString);
@@ -40,16 +40,21 @@ function storeArray(key, array) {
 
 //function to look for data in local storage when page is first loaded
 function retrieveArray(key) {
-    if (!JSON.parse(localStorage.getItem(key)) === null) {
+    console.log(userProjects);
+    console.log(JSON.parse(localStorage.getItem(key)));
+    if (JSON.parse(localStorage.getItem(key)) !== null) {
         userProjects = JSON.parse(localStorage.getItem(key));
         console.log(userProjects);
     }
 }
-//function to convert name to kebab type to eliminate any spaces
-const defaultProject = new Project("Default Project");
-userProjects.push(defaultProject);
+if (userProjects.length === 0) {
+    const defaultProject = new Project("Default Project");
+    userProjects.push(defaultProject);
+}
 displayProjects(userProjects);
-updateTaskForm(defaultProject);
+for (const project of userProjects) {
+    updateTaskForm(project);
+}
 
 // project form section
 projectFormListener(userProjects);
