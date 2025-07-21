@@ -7,10 +7,23 @@
 <script defer src="main.js"></script></head>
 <body>
     <div class="header">
-       
+       <p>To Do List</p>
     </div>
+    <div class="add-task">
+        <form action="new-task" id="new-task">
+            <label for="name">Task Name</label>
+            <input type="text" name="name" id="name">
+            <label for="project">Project</label>
+            <select name="project" id="project">
+                <option value="" disabled selected>-Assign to a Project</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div class="content-wrapper">
     <div class="info">
-        <form action="new-project">
+        <h2>New Project</h2>
+        <form action="new-project" id="new-project">
             <label for="name">Project Name</label>
             <input type="text" name="name" id="name">
             <label for="due">Due Date</label>
@@ -21,10 +34,19 @@
                 <option value="medium">Medium</option>
                 <option value="low">Low</option>
             </select>
+            <label for="description">Description</label>
+            <input type="textarea" name="description" id="description">
             <input type="submit" value="Submit">
         </form>
     </div>
-    <div class="content"></div>
+    
+    <div class="projects">
+        <h2>Projects</h2>
+    </div>
+    <div class="tasks">
+        <h2>Tasks</h2>
+    </div>
+    </div>
     
 </body>
 </html>
