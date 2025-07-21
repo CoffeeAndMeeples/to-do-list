@@ -1,7 +1,9 @@
 import "./styles.css";
 import { clearTasks, displayProjects, makeProjectClickable, activateProjectCheckbox } from "./dom.js";
 
- export const userProjects = [];
+export let userProjects = [];
+retrieveArray("userProjectsArray");
+
 class Project {
     constructor(name, description, due, priority) {
         this.name = name;
@@ -23,8 +25,27 @@ class Task {
     }
 }
 
-//function to convert name to kebab type to eliminate any spaces
+//use "userProjectsArray as the key for storing and retrieving userProjects"
 
+//function to update local storage with userProjects
+function storeArray(key, array) {
+    try {
+        const jsonString = JSON.stringify(array);
+        localStorage.setItem(key, jsonString);
+        console.log(jsonString)
+    } catch (error) {
+        console.error('Error storing array in local storage: ${error}');
+    }
+}
+
+//function to look for data in local storage when page is first loaded
+function retrieveArray(key) {
+    if (!JSON.parse(localStorage.getItem(key)) === null) {
+        userProjects = JSON.parse(localStorage.getItem(key));
+        console.log(userProjects);
+    }
+}
+//function to convert name to kebab type to eliminate any spaces
 const defaultProject = new Project("Default Project");
 userProjects.push(defaultProject);
 displayProjects(userProjects);
@@ -58,6 +79,7 @@ function projectFormListener(projectList) {
             const priority = formData.get("priority");
             const newProject = new Project(name, description, due, priority);
             userProjects.push(newProject);
+            storeArray("userProjectsArray", userProjects);
 
             displayProjects(projectList);
             //update add task dropdown
@@ -76,6 +98,7 @@ taskForm.addEventListener("submit", (event) => {
         console.log(formData.get("project"));
         if (item.name === formData.get("project")) {
             item.tasks.push(newTask);
+            storeArray("userProjectsArray", userProjects);
             const projectToDeselect = document.getElementById(item.id + "-checkbox");
             projectToDeselect.checked = false;
             

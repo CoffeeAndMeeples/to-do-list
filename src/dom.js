@@ -90,6 +90,7 @@ function activateProjectCheckbox(checkboxNode, project) {
     })
 
 }
+
 function loadProjectDetails(node) {
     //create the elements
     const container = document.createElement("div");
@@ -109,6 +110,7 @@ function loadProjectDetails(node) {
     container.appendChild(priority);
     node.appendChild(container);
 }
+
 // project node as the argument use the text to find the project from userProjects
 // and then create a task node for each task in selected project
 function displayTasks(node) {
@@ -148,7 +150,6 @@ function displayTasks(node) {
 }
 
 //load a node that is the title of a project with all of it's deatails in a child node
-
 function activateTaskCheckbox(checkboxNode, task, project) {
     checkboxNode.addEventListener("click", (event) => {
         const checkbox = document.getElementById(project.id + "-checkbox");
