@@ -1,4 +1,4 @@
-import { userProjects, storeArray } from ".";
+import { userProjects, storeArray } from "./index.js";
 
 export function clearTasks() {
     const parentNode = document.querySelector(".tasks");
@@ -8,9 +8,18 @@ export function clearTasks() {
         parentNode.removeChild(parentNode.lastChild);
     }
 }
+export function clearProjects() {
+    const parentNode = document.querySelector(".projects");
+    //clear existing children 
+    //leave the first child as it's the label for the node
+    while (parentNode.children.length > 1) {
+        parentNode.removeChild(parentNode.lastChild);
+    }
+}
 
 //display projects function
 export function displayProjects(projectList) {
+
     //grab the projects div
     const parentNode = document.querySelector(".projects");
     //create an array of all existing project names displayed in parentNode
@@ -40,11 +49,19 @@ export function displayProjects(projectList) {
             if (element.complete === "True") {
                 newInput.checked = true;
             }
+            const newDeleteButton = document.createElement("input");
+            newDeleteButton.type = "button";
+            newDeleteButton.classList.add("delete-button");
+            newDeleteButton.classList.add(element.id);
+            newDeleteButton.value = "Delete";
+            
             newDiv.appendChild(newInput);
             newDiv.appendChild(newLabel);
+            newDiv.appendChild(newDeleteButton);
             makeProjectClickable(newDiv);
             parentNode.appendChild(newDiv);
             activateProjectCheckbox(newInput, element);
+            activateProjectDeleteButton(newDeleteButton);
         }
     });
 }
@@ -57,7 +74,7 @@ export function makeProjectClickable(node) {
         if (currentlySelected !== null) {
         currentlySelected.classList.remove('selected');
         //delete all the child nodes of previously selected, except the label and checkbox
-        while (currentlySelected.children.length > 2) {
+        while (currentlySelected.children.length > 3) {
             currentlySelected.removeChild(currentlySelected.lastChild);
         }
         }
@@ -85,12 +102,10 @@ function activateProjectCheckbox(checkboxNode, project) {
         if (checkboxNode.checked) {
             project.complete = "True";
             storeArray("userProjectsArray", userProjects);
-            console.log(project);
         }
         else {
             project.complete = "False";
             storeArray("userProjectsArray", userProjects);
-            console.log(project);
         }
     })
 
@@ -140,16 +155,27 @@ export function displayTasks(node) {
                 if (task.complete === "True") {
                     newInput.checked = true;
                 }
+                const newDeleteButton = document.createElement("input");
+                newDeleteButton.type = "button";
+                newDeleteButton.classList.add("delete-button");
+                newDeleteButton.classList.add(task.id);
+                newDeleteButton.value = "Delete";
                 newNode.appendChild(newInput);
                 newNode.appendChild(newLabel);
+                newNode.appendChild(newDeleteButton);
                 parentNode.appendChild(newNode);
                 activateTaskCheckbox(newInput, task, project);
+                activateTaskDeleteButton(newDeleteButton);
             }
             project.selected = "True";
+            //update local storage
+            storeArray("userProjectsArray", userProjects);
             
         }
         else {
             project.selected = "False";
+            //update local storage
+            storeArray("userProjectsArray", userProjects);
         }
     }
 }
@@ -184,4 +210,51 @@ function activateTaskCheckbox(checkboxNode, task, project) {
         }
     })
 
+}
+
+function activateProjectDeleteButton(node) {
+    node.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        //find the project in the project list and delete it
+        for (let i = 0; i < userProjects.length; i++) {
+            if (node.classList.contains(userProjects[i].id)) {
+                // delete the node
+                deleteNode(userProjects[i].id);
+                //delete the project form userProjects
+                userProjects.splice(i, 1);
+                //update local storage
+                storeArray("userProjectsArray", userProjects);
+
+            }
+        }
+    })
+}
+function activateTaskDeleteButton(node) {
+    node.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        //find the task in the project list and delete it
+        for (const project of userProjects) {
+            for (let i = 0; i < project.tasks.length; i++) {
+                if (node.parentNode.id === project.tasks[i].id) {
+                // delete the node
+                deleteNode(project.tasks[i].id);
+                //delete the project form userProjects
+                project.tasks.splice(i,1);
+                
+                //update local storage
+                storeArray("userProjectsArray", userProjects);
+                }
+            }
+        }
+    })
+}
+
+function deleteNode(id) {
+    const nodeToDelete = document.querySelector("#" + id);
+    if (nodeToDelete.classList.contains("selected")) {
+        clearTasks();
+    }
+    nodeToDelete.remove();
 }

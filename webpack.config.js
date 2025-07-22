@@ -1,6 +1,7 @@
 // webpack.config.js
-const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const path = require("path");
 
 module.exports = {
   mode: "development",
@@ -15,13 +16,20 @@ module.exports = {
     watchFiles: ["./src/template.html"],
   },
   plugins: [
+    new NodePolyfillPlugin({
+      additionalAliases: ["process", "punycode"],
+    }),
     new HtmlWebpackPlugin({
       template: "./src/template.html",
     }),
   ],
+  resolve: {
+    conditionNames: ["browser", "require", "node"],
+  },
   module: {
     rules: [
       {
+        
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },

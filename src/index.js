@@ -21,7 +21,7 @@ class Task {
     constructor(name) {
         this.name = name;
         this.complete = "False";
-        this.id = makeKebab(name);
+        this.id = makeKebab(name) + "-" + name;
     }
 }
 
