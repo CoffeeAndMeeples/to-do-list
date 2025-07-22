@@ -191,8 +191,9 @@ function activateTaskCheckbox(checkboxNode, task, project) {
         }
         else {
             task.complete = "False";
-            storeArray("userProjectsArray", userProjects);
             checkbox.checked = false;
+            project.complete = "False";
+            storeArray("userProjectsArray", userProjects);
         }
         let tasksComplete = "True";
         for (const task of project.tasks) {
